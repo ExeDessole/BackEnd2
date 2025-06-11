@@ -4,14 +4,16 @@
   "main": "src/app.js",
   "type": "module",
   "scripts": {
-    "dev": "dotenv -e .dev -- node --watch --trace-warnings src/app.js"
+    "start": "dotenv -e .dev -- node --watch --trace-warnings src/app.js"
   },
   "keywords": [],
   "author": "Exequiel Dessole",
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "cookie-parser": "^1.4.7",
     "express": "^5.1.0",
+    "express-session": "^1.18.1",
     "mongoose": "^8.15.0",
     "morgan": "^1.10.0"
   },
