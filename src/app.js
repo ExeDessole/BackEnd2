@@ -1,4 +1,4 @@
-import express, {json, urlencoded} from "express"
+import express, { json, urlencoded } from "express"
 import cookieParser from "cookie-parser";
 import session from "express-session";
 import mongoose from "mongoose"
@@ -6,7 +6,10 @@ import morgan from "morgan";
 
 // Declaración de APP y PORT
 const app = express();
-const {PORT,SECRET} = process.env;
+const { PORT, SECRET } = process.env;
+const URI_DB= "mongodb+srv://admin:admin@appstock.iwvpmwv.mongodb.net./AppStock?retryWrites=true&w=majority";
+
+
 
 // Middlewares para APP
 app.use(json());
@@ -15,34 +18,43 @@ app.use(morgan("dev"));
 app.use(cookieParser(SECRET));
 
 // Inicio de servidor Express
-app.listen(PORT, ()=>{
+app.listen(PORT, () => {
     console.log(`Listening port: ${PORT}`)
 });
-
+// Conexion a AppStock DB
+const connectDB = async () =>{
+    try {
+        await mongoose.connect(URI_DB);
+        console.log('Conectado a MongoDB');
+    } catch (error) {
+        console.error('Error al conectar a MongoDB:', error);
+    }
+};
+connectDB();
 // Rutas generales
-app.get("/", (req,res) =>{
+app.get("/", (req, res) => {
     res.cookie("CookiePrueba", "valor de la cookie", {
         maxAge: 10000,
-        sameSite: true, 
+        sameSite: true,
         signed: true,
         httpOnly: true
     })
     res.send("Pagina principal CON COOKIE")
 })
 
-app.get("/view-cookie", (req,res) =>{
+app.get("/view-cookie", (req, res) => {
     let cookie_datos = req.cookies;
     res.send(`Datos de la cookie: ${cookie_datos}`)
 })
 
-app.get("/register", (req,res) =>{
+app.get("/register", (req, res) => {
     res.send("Pagina de registro")
 })
 
-app.get("/login", (req,res) =>{
+app.get("/login", (req, res) => {
     res.send("Pagina de login")
 })
 
-app.get("/protegida", (req,res) =>{
+app.get("/protegida", (req, res) => {
     res.send("Pagina protegida")
 })
