@@ -1,100 +1,68 @@
-import express, { json, urlencoded } from "express";
+import express from "express";
+import {engine} from "express-handlebars"
+import viewsRouter from "./routes/viewsRouter.js";
+import usersRouter from "./routes/usersRouter.js";
+import sessionsRouter from "./routes/sessionsRouter.js";
 import cookieParser from "cookie-parser";
 import session from "express-session";
 import mongoose from "mongoose";
 import morgan from "morgan";
+import path from "path";
+import { fileURLToPath } from "url";
 
-// Declaración de APP y PORT
+// Para __dirname en ES Modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Variables de entorno
 const app = express();
+const {PORT, SECRET, URI_DB} = process.env;
 
-const { PORT, SECRET } = process.env;
-const URI_DB = "mongodb+srv://admin:admin@appstock.iwvpmwv.mongodb.net./AppStock?retryWrites=true&w=majority";
-
-// Middlewares para APP
-app.use(json());
-app.use(urlencoded({ extended: true }));
+// Middlewares
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(morgan("dev"));
-app.use(cookieParser(SECRET));
+app.use(cookieParser());
+app.use(session({
+  secret: SECRET,
+  saveUninitialized: true,
+  resave:false,
+  cookie: {
+    httpOnly: true,
+    sameSite: true,
+    maxAge: 24*60*60
+  }
+}));
 
-// Middlewares para app
-app.use(json());
-app.use(urlencoded({ extended: true }));
-app.use(morgan("dev"));
-app.use(cookieParser(SECRET));
+// Handlebars config
+app.engine('hbs', engine({
+  extname: '.hbs',
+  defaultLayout: 'main',
+  layoutsDir: path.join(__dirname, 'views/layouts')
+}));
 
-// Inicio de servidor Express
-app.listen(PORT, () => {
-  console.log(`Listening port: ${PORT}`);
-});
+app.set('view engine', 'hbs');
+app.set('views', path.join(__dirname, 'views'));
 
-// Conexion a AppStock DB
+// Rutas
+app.use("/", viewsRouter);
+app.use("/users", usersRouter);
+app.use("/sessions", sessionsRouter);
+
+// Conexión a MongoDB
 const connectDB = async () => {
   try {
     await mongoose.connect(URI_DB);
-    console.log("Conectado a MongoDB");
+    console.log("✅ Conectado a MongoDB");
   } catch (error) {
-    console.error("Error al conectar a MongoDB:", error);
+    console.error("❌ Error al conectar a MongoDB:", error.message);
+    process.exit(1);
   }
 };
+
 connectDB();
 
-// Rutas generales
-
-app.get("/", (req, res) => {
-  res.cookie("CookiePrueba", "valor de la cookie", {
-    maxAge: 10000,
-    sameSite: true,
-    signed: true,
-    httpOnly: true,
-  });
-});  // << Cerré la llave y paréntesis que faltaban aquí
-
-app.get("/", (req, res) => {
-  res.cookie("CookieExe", "valor de la cookie", {
-    //{name: Exe, last_name: Dessole},
-    httpOnly: true,
-    sameSite: true,
-    maxAge: 10000,
-    //secure: true
-  });
-  res.send("Pagina principal CON COOKIE");
+//Iniciar servidor
+app.listen(PORT, () => {
+  console.log(`🚀 Servidor escuchando en http://localhost:${PORT}`);
 });
-
-app.get("/view-cookie", (req, res) => {
-  let cookie_datos = req.cookies;
-  res.send(`Datos de la cookie: ${cookie_datos}`);
-});
-
-app.get("/view-cookie", (req, res) => {
-  console.log(req.cookies);
-  res.send(req.cookies);
-});
-
-/*app.get("/register", (req,res) =>{
-    res.send("Pagina de registro");
-})
-
-app.get("/login", (req, res) => {
-    res.send("Pagina de login");
-})
-
-app.get("/protegida", (req, res) => {
-    res.send("Pagina protegida");
-});
-
-app.get("/cookies", (req,res) =>{
-    res.cookie("cookieRandom", "soy el valor de la cookie", {
-        //httpOnly: true,
-        maxAge: 20000
-        //secure:true,
-    });
-    res.send("Pagina con cookie");
-})
-
-let count = 0
-app.get("/session", (req,res) =>{
-    count++;
-    let msj= `Usted ha visitado la pagina ${count} veces`;
-    res.send(msj);
-})
-*/
