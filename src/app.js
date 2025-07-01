@@ -9,6 +9,8 @@ import mongoose from "mongoose";
 import morgan from "morgan";
 import path from "path";
 import { fileURLToPath } from "url";
+import initializePAssport from "./config/passport/config.js";
+import passport from "passport";
 
 // Para __dirname en ES Modules
 const __filename = fileURLToPath(import.meta.url);
@@ -33,7 +35,9 @@ app.use(session({
     maxAge: 24*60*60
   }
 }));
-
+initializePAssport(passport);
+app.use(passport.initialize());
+app.use(passport.session());
 // Handlebars config
 app.engine('hbs', engine({
   extname: '.hbs',
