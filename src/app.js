@@ -45,14 +45,14 @@ app.set('view engine', 'hbs');
 app.set('views', path.join(__dirname, 'views'));
 
 // Rutas
-app.use("/", viewsRouter);
-app.use("/users", usersRouter);
-app.use("/sessions", sessionsRouter);
+app.use("/users", viewsRouter);
+app.use("api//users", usersRouter);
+app.use("api/sessions", sessionsRouter);
 
 // Conexión a MongoDB
 const connectDB = async () => {
   try {
-    await mongoose.connect(URI_DB);
+    await mongoose.connect(URI_DB, {dbName: "practicaIntegradora"});
     console.log("✅ Conectado a MongoDB");
   } catch (error) {
     console.error("❌ Error al conectar a MongoDB:", error.message);
