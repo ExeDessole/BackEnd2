@@ -8,7 +8,7 @@ usersRouter.post("/", async (req, res) => {
   try {
     const newUser = new userModel(req.body);
     await newUser.save();
-    res.redirect("/profile"); // Redirigí a una vista si estás usando Handlebars
+    res.redirect("profile"); // Redirigí a una vista si estás usando Handlebars
   } catch (error) {
     res.status(500).render("failed", {
       errorMessage: "Error al crear el usuario",
