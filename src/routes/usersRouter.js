@@ -3,24 +3,11 @@ import userModel from "../models/userModel.js";
 
 const usersRouter = Router();
 
-// CREATE USER
-usersRouter.post("/", async (req, res) => {
+//CRUD USER
+//RETURN USER LIST
+usersRouter.get("/", async (req,res) =>{
   try {
-    const newUser = new userModel(req.body);
-    await newUser.save();
-    res.redirect("profile"); // Redirigí a una vista si estás usando Handlebars
-  } catch (error) {
-    res.status(500).render("failed", {
-      errorMessage: "Error al crear el usuario",
-    });
-  }
-});
-
-// READ ALL USERS
-usersRouter.get("/", async (req, res) => {
-  try {
-    const userList = await userModel.find();
-    res.status(200).json(userList);
+    res.status(200).json(await userModel.find());
   } catch (error) {
     res.status(500).json({
       error: "Error al obtener usuarios",
@@ -28,67 +15,26 @@ usersRouter.get("/", async (req, res) => {
     });
   }
 });
-
-// READ USER BY ID
-usersRouter.get("/:id", async (req, res) => {
+//RETURN USER BY ID 
+usersRouter.get("/:id", async (req,res) =>{
   try {
-    const { id } = req.params;
-    const user = await userModel.findById(id);
-
-    if (!user)
-      return res.status(404).json({ error: "Usuario no encontrado" });
-
-    res.status(200).json(user);
+    res.json(await userModel.findById(req.params.id))
   } catch (error) {
     res.status(500).json({
-      errorMessage: "ID inválido o error en el servidor",
-      details: error.message,
+      error: "Usuario no encontrado",
+      details: error.message
     });
   }
 });
 
-// UPDATE USER
-usersRouter.put("/:id", async (req, res) => {
+//DELETE USER BY ID
+usersRouter.delete("/:id", async (req,res) =>{
   try {
-    const { id } = req.params;
-    const updatedUser = await userModel.findByIdAndUpdate(id, req.body, {
-      new: true,
-    });
-
-    if (!updatedUser)
-      return res.status(404).json({ error: "Usuario no encontrado" });
-
-    res.status(200).json({
-      message: "Usuario actualizado",
-      user: updatedUser,
-    });
+    res.json(await userModel.findByIdAndDelete({_id: req.params.id}));
   } catch (error) {
     res.status(500).json({
-      errorMessage: "Error al actualizar el usuario",
-      details: error.message,
+      error: "No se pudo eliminar el usuario",
+      details: error.message
     });
   }
 });
-
-// DELETE USER
-usersRouter.delete("/:id", async (req, res) => {
-  try {
-    const { id } = req.params;
-    const deletedUser = await userModel.findByIdAndDelete(id);
-
-    if (!deletedUser)
-      return res.status(404).json({ error: "Usuario no encontrado" });
-
-    res.status(200).json({
-      message: "Usuario eliminado",
-      user: deletedUser,
-    });
-  } catch (error) {
-    res.status(500).json({
-      errorMessage: "Error al eliminar el usuario",
-      details: error.message,
-    });
-  }
-});
-
-export default usersRouter;
