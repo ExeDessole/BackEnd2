@@ -1,14 +1,15 @@
 import { Router } from "express";
+import passport from "passport";
 
 const sessionsRouter = Router();
 
-sessionsRouter.post("login", (req, res) =>{
+sessionsRouter.post("login", passport.authenticate("login") =>{
 
 });
-sessionsRouter.post("register", (req, res) =>{
+sessionsRouter.post("register", passport.authenticate("register", {successRedirect: "profile", failureRedirect: "failed"}) =>{
 
 });
-sessionsRouter.post("logout", (req, res) =>{
+sessionsRouter.post("logout", passport.authenticate("logout") =>{
 
 });
 
