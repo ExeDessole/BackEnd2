@@ -38,6 +38,7 @@ app.use(session({
 initializePAssport(passport);
 app.use(passport.initialize());
 app.use(passport.session());
+
 // Handlebars config
 app.engine('hbs', engine({
   extname: '.hbs',
@@ -63,7 +64,6 @@ const connectDB = async () => {
     process.exit(1);
   }
 };
-
 connectDB();
 
 //Iniciar servidor
