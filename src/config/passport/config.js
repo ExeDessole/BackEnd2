@@ -7,9 +7,10 @@ const initializePAssport = () =>{
     passport.use("register", registerLocal);
     passport.use("jwt");
 
-passport.serializeUser((user, done) =>{
+    passport.serializeUser((user, done) =>{
     done(null, user.id)
     });
+    
     passport.deserializeUser(async(id, done) => {
         const user = await userModel.findById(id);
         delete user.password;
