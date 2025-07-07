@@ -2,6 +2,7 @@ import passport from "passport";
 import { registerLocal, loginLocal } from "./localStrategy.js";
 import userModel from "../../models/userModel.js";
 
+
 const initializePAssport = () =>{
     passport.use("login", loginLocal);
     passport.use("register", registerLocal);
