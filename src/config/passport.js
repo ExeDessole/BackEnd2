@@ -1,12 +1,13 @@
 import passport from "passport";
-import { registerLocal, loginLocal } from "./localStrategy.js";
-import userModel from "../../models/userModel.js";
+import { registerLocal, loginLocal } from "./strategies/localStrategy.js";
+import { jwtStrategy } from "./strategies/jwtStrategy.js";
+import userModel from "../DAOS/mongo/models/userModel.js";
 
 
 const initializePAssport = () =>{
     passport.use("login", loginLocal);
     passport.use("register", registerLocal);
-    passport.use("jwt");
+    passport.use("jwt", jwtStrategy);
 
     passport.serializeUser((user, done) =>{
     done(null, user.id)

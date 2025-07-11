@@ -1,6 +1,5 @@
-
-import jwt from passport
-import userModel from "../../models/userModel.js";
+import { Strategy } from "passport-local";
+import userModel from "../../DAOS/mongo/models/userModel.js";
 
 async function verifyRegister(paramsreq, username, password, don) {
     const {first_name, last_name, age, role} = req;

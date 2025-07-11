@@ -1,5 +1,5 @@
 import { Router } from "express";
-import userModel from "../models/userModel.js";
+import userModel from "../DAOS/mongo/models/userModel.js";
 
 const adminRouter = Router();
 
@@ -92,4 +92,4 @@ adminRouter.delete("/:id", async (req, res) => {
   }
 });
 
-export default adminRouter
+export default adminRouter;
