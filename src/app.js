@@ -1,24 +1,15 @@
 import express from "express";
-import {engine} from "express-handlebars"
-import viewsRouter from "./routes/viewsRouter.js";
-import usersRouter from "./routes/usersRouter.js";
-import sessionsRouter from "./routes/sessionsRouter.js";
-import cookieParser from "cookie-parser";
+import router from "./routes/index.js";
+import connectDB from "./config/db.js";
+import configHbs from "./config/handlebars.js";
+import initializePAssport from "./config/passport.js";
 import session from "express-session";
-import mongoose from "mongoose";
+import cookieParser from "cookie-parser";
 import morgan from "morgan";
-import path from "path";
-import { fileURLToPath } from "url";
-import initializePAssport from "./config/passport/config.js";
-import passport from "passport";
-
-// Para __dirname en ES Modules
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 // Variables de entorno
 const app = express();
-const {PORT, SECRET, URI_DB} = process.env;
+const {PORT, SECRET} = process.env;
 
 // Middlewares
 app.use(express.json());
@@ -35,38 +26,27 @@ app.use(session({
     maxAge: 24*60*60
   }
 }));
-initializePAssport(passport);
-app.use(passport.initialize());
-app.use(passport.session());
+//initializePAssport();
+//app.use(passport.initialize());
+//app.use(passport.session());
 
 // Handlebars config
-app.engine('hbs', engine({
-  extname: '.hbs',
-  defaultLayout: 'main',
-  layoutsDir: path.join(__dirname, 'views/layouts')
-}));
-
-app.set('view engine', 'hbs');
-app.set('views', path.join(__dirname, 'views'));
+configHbs(app);
 
 // Rutas
-app.use("/users", viewsRouter);
-app.use("api//users", usersRouter);
-app.use("api/sessions", sessionsRouter);
+app.use("/", router);
 
 // Conexión a MongoDB
-const connectDB = async () => {
-  try {
-    await mongoose.connect(URI_DB, {dbName: "practicaIntegradora"});
-    console.log("✅ Conectado a MongoDB");
-  } catch (error) {
-    console.error("❌ Error al conectar a MongoDB:", error.message);
-    process.exit(1);
-  }
-};
 connectDB();
+
+// Middleware de 404 personalizado
+app.use((req, res) => {
+  res.status(404).json({ error: "Ruta no encontrada" });
+});
 
 //Iniciar servidor
 app.listen(PORT, () => {
   console.log(`🚀 Servidor escuchando en http://localhost:${PORT}`);
 });
+
+export default app;

@@ -1,5 +1,5 @@
 import { Router } from "express";
-import userModel from "../models/userModel.js";
+import userModel from "../DAOS/mongo/models/userModel.js";
 
 const usersRouter = Router();
 
@@ -38,3 +38,5 @@ usersRouter.delete("/:id", async (req,res) =>{
     });
   }
 });
+
+export default usersRouter;
