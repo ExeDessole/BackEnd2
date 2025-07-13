@@ -2,10 +2,12 @@ import express from "express";
 import router from "./routes/index.js";
 import connectDB from "./config/db.js";
 import configHbs from "./config/handlebars.js";
+import passport from "passport";
 import initializePAssport from "./config/passport.js";
 import session from "express-session";
 import cookieParser from "cookie-parser";
 import morgan from "morgan";
+import viewsRouter from "./routes/viewsRouter.js";
 
 // Variables de entorno
 const app = express();
@@ -26,14 +28,15 @@ app.use(session({
     maxAge: 24*60*60
   }
 }));
-//initializePAssport();
-//app.use(passport.initialize());
-//app.use(passport.session());
+initializePAssport();
+app.use(passport.initialize());
+app.use(passport.session());
 
 // Handlebars config
 configHbs(app);
 
 // Rutas
+app.use("/", viewsRouter);
 app.use("/", router);
 
 // Conexión a MongoDB

@@ -1,9 +1,11 @@
 import { Strategy as JwtStrategy, ExtractJwt } from "passport-jwt";
 import userModel from "../../DAOS/mongo/models/userModel.js";
 
+const { JWT_SECRET } = process.env;
+
 const options = {
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-  secretOrKey: process.env.JWT_SECRET,
+  secretOrKey: JWT_SECRET,
 };
 
 export const jwtStrategy = new JwtStrategy(options, async (payload, done) => {
