@@ -1,37 +1,35 @@
-import userModel from "../DAOS/mongo/models/userModel.js";
+import servicesUser from "../services/userService.js";
 
-//CRUD USER 
-//RETURN USER LIST
-usersRouter.get("/", async (req,res) =>{
+export async function getUserProfile(req, res) {
   try {
-    res.status(200).json(await userModel.find());
+    const userId = req.user._id;
+    const user = await servicesUser.getUser(userId);
+    res.status(200).json(user);
   } catch (error) {
-    res.status(500).json({
-      error: "Error al obtener usuarios",
-      details: error.message,
-    });
+    res.status(404).json({ error: error.message });
   }
-});
-//RETURN USER BY ID 
-usersRouter.get("/:id", async (req,res) =>{
-  try {
-    res.json(await userModel.findById(req.params.id))
-  } catch (error) {
-    res.status(500).json({
-      error: "Usuario no encontrado",
-      details: error.message
-    });
-  }
-});
+}
 
-//DELETE USER BY ID
-usersRouter.delete("/:id", async (req,res) =>{
+export async function updateUserProfile(req, res) {
   try {
-    res.json(await userModel.findByIdAndDelete({_id: req.params.id}));
+    const userId = req.user._id;
+    const updateData = req.body;
+    const updatedUser = await servicesUser.updateUser(userId, updateData);
+    res.status(200).json(updatedUser);
   } catch (error) {
-    res.status(500).json({
-      error: "No se pudo eliminar el usuario",
-      details: error.message
-    });
+    res.status(400).json({ error: error.message });
   }
-});
+}
+
+export async function deleteUserAccount(req, res) {
+  try {
+    const userId = req.user._id;
+    const deletedUser = await servicesUser.deleteUser(userId);
+    res.status(200).json({
+      message: "Usuario eliminado correctamente",
+      deletedUser,
+    });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+}

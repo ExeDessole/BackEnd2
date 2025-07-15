@@ -1,5 +1,4 @@
 import express from "express";
-import router from "./routes/index.js";
 import connectDB from "./config/db.js";
 import configHbs from "./config/handlebars.js";
 import passport from "passport";
@@ -7,7 +6,8 @@ import initializePAssport from "./config/passport.js";
 import session from "express-session";
 import cookieParser from "cookie-parser";
 import morgan from "morgan";
-import viewsRouter from "./routes/viewsRouter.js";
+import views from "./routes/views.js";
+import api from "./routes/index.js";
 
 // Variables de entorno
 const app = express();
@@ -36,8 +36,8 @@ app.use(passport.session());
 configHbs(app);
 
 // Rutas
-app.use("/", viewsRouter);
-app.use("/", router);
+app.use("/", views);
+app.use("/api", api);
 
 // Conexión a MongoDB
 connectDB();
