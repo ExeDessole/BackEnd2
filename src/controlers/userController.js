@@ -4,9 +4,9 @@ export async function getUserProfile(req, res) {
   try {
     const userId = req.user._id;
     const user = await servicesUser.getUser(userId);
-    res.status(200).json(user);
+    res.status(200).render("user/profile", {user});
   } catch (error) {
-    res.status(404).json({ error: error.message });
+    res.status(404).render("auth/failed", { error: error.message });
   }
 }
 
@@ -15,9 +15,9 @@ export async function updateUserProfile(req, res) {
     const userId = req.user._id;
     const updateData = req.body;
     const updatedUser = await servicesUser.updateUser(userId, updateData);
-    res.status(200).json(updatedUser);
+    res.status(200).render("user/profile", {updatedUser});
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    res.status(400).render("auth/failed", { error: error.message });
   }
 }
 
@@ -30,6 +30,6 @@ export async function deleteUserAccount(req, res) {
       deletedUser,
     });
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    res.status(400).render("auth/failed", { error: error.message });
   }
 }

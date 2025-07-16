@@ -8,10 +8,12 @@ import cookieParser from "cookie-parser";
 import morgan from "morgan";
 import views from "./routes/views.js";
 import api from "./routes/index.js";
+import { createDefaultAdmin } from "./utils.js";
 
 // Variables de entorno
 const app = express();
 const {PORT, SECRET} = process.env;
+createDefaultAdmin();
 
 // Middlewares
 app.use(express.json());
