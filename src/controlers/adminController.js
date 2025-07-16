@@ -1,91 +1,107 @@
-import userModel from "../DAOS/mongo/models/userModel.js";
+import adminServices from "../services/adminServices.js";
 
-
-//CRUD ADMIN CON TODOS LOS PERMISOS
-// CREATE USER
-adminRouter.post("/", async (req, res) => {
+// Obtener todos los usuarios
+export async function getAllUsers(req, res) {
   try {
-    const newUser = new userModel(req.body);
-    await newUser.save();
-    res.redirect("profile"); // Redirigí a una vista si estás usando Handlebars
+    const users = await adminServices.getAllUsers();
+    res.status(200).json(users);
   } catch (error) {
-    res.status(500).render("failed", {
-      errorMessage: "Error al crear el usuario",
-    });
+    res.status(500).json({ error: error.message });
   }
-});
+};
 
-// READ ALL USERS
-adminRouter.get("/", async (req, res) => {
+// Obtener todos los administradores
+export async function getAllAdmins(req, res) {
   try {
-    const userList = await userModel.find();
-    res.status(200).json(userList);
+    const admins = await adminServices.getAllAdmins();
+    res.status(200).json(admins);
   } catch (error) {
-    res.status(500).json({
-      error: "Error al obtener usuarios",
-      details: error.message,
-    });
+    res.status(500).json({ error: error.message });
   }
-});
+};
 
-// READ USER BY ID
-adminRouter.get("/:id", async (req, res) => {
+// Obtener usuario por ID
+export async function getUserById(req, res) {
   try {
-    const { id } = req.params;
-    const user = await userModel.findById(id);
-
-    if (!user)
-      return res.status(404).json({ error: "Usuario no encontrado" });
-
+    const user = await adminServices.getUserById(req.params.id);
+    if (!user) return res.status(404).json({ error: "Usuario no encontrado" });
     res.status(200).json(user);
   } catch (error) {
-    res.status(500).json({
-      errorMessage: "ID inválido o error en el servidor",
-      details: error.message,
-    });
+    res.status(500).json({ error: error.message });
   }
-});
+};
 
-// UPDATE USER
-adminRouter.put("/:id", async (req, res) => {
+// Obtener admin por ID
+export async function getAdminById(req, res) {
   try {
-    const { id } = req.params;
-    const updatedUser = await userModel.findByIdAndUpdate(id, req.body, {
-      new: true,
-    });
-
-    if (!updatedUser)
-      return res.status(404).json({ error: "Usuario no encontrado" });
-
-    res.status(200).json({
-      message: "Usuario actualizado",
-      user: updatedUser,
-    });
+    const admin = await adminServices.getAdminById(req.params.id);
+    if (!admin) return res.status(404).json({ error: "Administrador no encontrado" });
+    res.status(200).json(admin);
   } catch (error) {
-    res.status(500).json({
-      errorMessage: "Error al actualizar el usuario",
-      details: error.message,
-    });
+    res.status(500).json({ error: error.message });
   }
-});
+};
 
-// DELETE USER
-adminRouter.delete("/:id", async (req, res) => {
+// Crear nuevo usuario
+export async function createUser(req, res) {
   try {
-    const { id } = req.params;
-    const deletedUser = await userModel.findByIdAndDelete(id);
-
-    if (!deletedUser)
-      return res.status(404).json({ error: "Usuario no encontrado" });
-
-    res.status(200).json({
-      message: "Usuario eliminado",
-      user: deletedUser,
-    });
+    const newUser = await adminServices.createUser(req.body);
+    res.status(201).json(newUser);
   } catch (error) {
-    res.status(500).json({
-      errorMessage: "Error al eliminar el usuario",
-      details: error.message,
-    });
+    res.status(400).json({ error: error.message });
   }
-});
+};
+
+// Crear nuevo admin
+export async function createAdmin(req, res) {
+  try {
+    const newAdmin = await adminServices.createAdmin(req.body);
+    res.status(201).json(newAdmin);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+// Actualizar usuario
+export async function updateUserById(req, res) {
+  try {
+    const updatedUser = await adminServices.updateUserById(req.params.id, req.body);
+    if (!updatedUser) return res.status(404).json({ error: "Usuario no encontrado" });
+    res.status(200).json(updatedUser);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+// Actualizar admin
+export async function updateAdminById(req, res) {
+  try {
+    const updatedAdmin = await adminServices.updateAdminById(req.params.id, req.body);
+    if (!updatedAdmin) return res.status(404).json({ error: "Administrador no encontrado" });
+    res.status(200).json(updatedAdmin);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+// Eliminar usuario
+export async function deleteUserById(req, res) {
+  try {
+    const deletedUser = await adminServices.deleteUserById(req.params.id);
+    if (!deletedUser) return res.status(404).json({ error: "Usuario no encontrado" });
+    res.status(200).json({ message: "Usuario eliminado correctamente", user: deletedUser });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+// Eliminar admin
+export async function deleteAdminById(req, res) {
+  try {
+    const deletedAdmin = await adminServices.deleteAdminById(req.params.id);
+    if (!deletedAdmin) return res.status(404).json({ error: "Administrador no encontrado" });
+    res.status(200).json({ message: "Administrador eliminado correctamente", admin: deletedAdmin });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};

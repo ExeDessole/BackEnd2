@@ -1,22 +1,32 @@
 import { Router } from "express";
-
+import {
+  getAllUsers,
+  getAllAdmins,
+  getUserById,
+  getAdminById,
+  createUser,
+  createAdmin,
+  updateUserById,
+  updateAdminById,
+  deleteUserById,
+  deleteAdminById
+} from "../controllers/adminController.js";
 
 const adminRouter = Router();
 
-//CRUD ADMIN CON TODOS LOS PERMISOS
-// CREATE USER
-adminRouter.post("/", );
+//TODOS LOS PERMISOS
+//CRUD USUARIOS
+adminRouter.get("/users", getAllUsers);
+adminRouter.get("/users/:id", getUserById);
+adminRouter.post("/users", createUser);
+adminRouter.put("/users/:id", updateUserById);
+adminRouter.delete("/users/:id", deleteUserById);
 
-// READ ALL USERS
-adminRouter.get("/", );
-
-// READ USER BY ID
-adminRouter.get("/:id", );
-
-// UPDATE USER
-adminRouter.put("/:id", );
-
-// DELETE USER
-adminRouter.delete("/:id", );
+//CRUD ADMIN
+adminRouter.get("/admins", getAllAdmins);
+adminRouter.get("/admins/:id", getAdminById);
+adminRouter.post("/admins", createAdmin);
+adminRouter.put("/admins/:id", updateAdminById);
+adminRouter.delete("/admins/:id", deleteAdminById);
 
 export default adminRouter;
