@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { getUserProfile } from "../controlers/userController.js";
 
 const views = Router();
 
@@ -19,7 +20,7 @@ views.get("/register", (req, res) => {
 
 // Perfil del usuario
 views.get("/profile", (req, res) => {
-  res.render("user/profile");
+  res.render("user/profile", { user: req.user });
 });
 
 // Página de error (fallo)

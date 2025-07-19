@@ -12,6 +12,7 @@ export async function createUser(req, res) {
     const newUser = await servicesUser.createUser({
       first_name,
       last_name,
+      age,
       email,
       password,
       age,
@@ -26,14 +27,18 @@ export async function createUser(req, res) {
 };
 
 export async function getUserProfile(req, res) {
+  console.log("🧠 Usuario desde req.user:", req.user);
   try {
     const userId = req.user._id;
     const user = await servicesUser.getUser(userId);
-    res.status(200).render("user/profile", {user});
+    console.log("📦 Usuario desde DB:", user);
+    res.render("user/profile", { user });
   } catch (error) {
+    console.error("❌ Error en getUserProfile:", error);
     res.status(404).render("auth/failed", { error: error.message });
   }
-};
+}
+
 
 export async function updateUserProfile(req, res) {
   try {
