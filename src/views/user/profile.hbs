@@ -43,7 +43,7 @@
       text-align: left;
     }
 
-    th {
+    th,{
       background-color: #007BFF;
       color: white;
     }
@@ -80,16 +80,18 @@
         <tr>
           <th>Nombre</th>
           <th>Apellido</th>
+          <th>Edad</th>
           <th>Email</th>
           <th>Rol</th>
         </tr>
       </thead>
       <tbody>
       <tr>
-        <td>{{newUser.first_name}}</td>
-        <td>{{newUser.last_name}}</td>
-        <td>{{newUser.email}}</td>
-        <td>{{newUser.role}}</td>
+        <td>{{user.first_name}}</td>
+        <td>{{user.last_name}}</td>
+        <td>{{user.age}}</td>
+        <td>{{user.email}}</td>
+        <td>{{user.role}}</td>
       </tr>
 
       </tbody>

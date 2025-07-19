@@ -27,38 +27,19 @@ async function verifyRegister(req, email, password, done) {
 };
 
 async function verifyLogin(email, password, done) {
-    try {
-        console.log("Buscando usuario con email:", email);
-        const user = await userModel.findOne({email});
-        const role = "user";
-        console.log("No se encontró en users, buscando en admins...");
-        if(!user){
-          const user = await adminModel.findOne({email});
-          const role = "admin";  
-        };
-        console.log("❌ Usuario no encontrado en ninguna colección.");
-        if(!user){
-            return done(null, false, {message: "Usuario no encontrado"});
-        };
+  try {
+    const user = await userModel.findOne({ email });
+    if (!user) return done(null, false, { message: "Usuario no encontrado" });
 
-        const isValid = await user.comparePassword(password);
+    const isValid = await user.comparePassword(password);
+    if (!isValid) return done(null, false, { message: "Contraseña incorrecta" });
 
-        if(!isValid){
-             console.log("❌ Contraseña inválida.");
-            return done(null, false, {message: "Credencial invalida"});
-        };
-
-        const userObj = user.toObject();
-        userObj.role = role;
-        userObj.token = generateToken(user);
-
-        return done( null, userObj)
-    } catch (error) {
-        console.log(error);
-        return done("Internal server error");
-    }
+    // No agregues token ni hagas toObject
+    return done(null, user); 
+  } catch (error) {
+    return done(error);
+  }
 };
-
 
 export const registerLocal = new Strategy({usernameField: "email", passReqToCallback: true}, verifyRegister);
 export const loginLocal = new Strategy({usernameField: "email"}, verifyLogin)

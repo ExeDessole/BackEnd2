@@ -5,19 +5,26 @@ import userModel from "../DAOS/mongo/models/userModel.js";
 
 
 const initializePAssport = () =>{
-    passport.use("login", loginLocal);
-    passport.use("register", registerLocal);
-    passport.use("jwt", jwtStrategy);
+  passport.use("login", loginLocal);
+  passport.use("register", registerLocal);
+  passport.use("jwt", jwtStrategy);
 
-    passport.serializeUser((user, done) =>{
-    done(null, user.id)
-    });
-    
-    passport.deserializeUser(async(id, done) => {
-        const user = await userModel.findById(id);
-        delete user.password;
-        done(null, user)
-    });
+  passport.serializeUser((user, done) => {
+    console.log("✅ SERIALIZE:", user._id);
+    done(null, user._id);
+  });
+
+  passport.deserializeUser(async (id, done) => {
+    try {
+      const user = await userModel.findById(id).lean(); // o sin .lean() si preferís
+      if (!user) return done(null, false);
+      delete user.password;
+      console.log("🔁 DESERIALIZE:", user);
+      done(null, user);
+    } catch (err) {
+      done(err);
+    }
+  });
 };
 
 export default initializePAssport;

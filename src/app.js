@@ -43,6 +43,12 @@ initializePAssport();
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.use((req, res, next) => {
+  console.log("📦 req.session:", req.session);
+  console.log("👤 req.user:", req.user);
+  next();
+});
+
 app.use(cors({
   origin: `http://localhost:3000`,//PUERTO DEL FRONT
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
