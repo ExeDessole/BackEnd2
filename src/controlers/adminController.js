@@ -56,6 +56,10 @@ export async function createUser(req, res) {
 export async function createAdmin(req, res) {
   try {
     const newAdmin = await adminServices.createAdmin(req.body);
+    
+    if (!email || !password) {
+    return res.status(400).json({ error: "Email y password son obligatorios" });
+  }
     res.status(201).json(newAdmin);
   } catch (error) {
     res.status(400).json({ error: error.message });

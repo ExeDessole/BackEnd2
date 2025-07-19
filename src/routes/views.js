@@ -9,22 +9,22 @@ views.get("/", (req, res) => {
 
 // Página de login
 views.get("/login", (req, res) => {
-  res.render("login");
+  res.render("auth/login");
 });
 
 // Página de registro
 views.get("/register", (req, res) => {
-  res.render("register");
+  res.render("auth/register");
 });
 
 // Perfil del usuario
 views.get("/profile", (req, res) => {
-  res.render("profile");
+  res.render("user/profile");
 });
 
 // Página de error (fallo)
 views.get("/failed", (req, res) => {
-  res.render("failed");
+  res.render("auth/failed");
 });
 
 export default views;

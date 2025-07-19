@@ -1,6 +1,12 @@
-import userDao from "../DAOS/mongo/user.DAO.js";
+import userDao from "../DAOS/mongo/userDAO.js";
+import userModel from "../DAOS/mongo/models/userModel.js";
 
 const servicesUser = {
+    async createUser(userData) {
+    const existing = await userDAO.findByEmail(userData.email);
+    if (existing) throw new Error("El email ya está en uso");
+    return await userDAO.create(userData);
+    },
     async getUser(id) {
         const user = await userDao.getById(id);
         if(!user) throw new Error("Usuario no encontrado");
