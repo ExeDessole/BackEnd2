@@ -23,7 +23,7 @@ sessionsRouter.post("/logout", (req, res) =>{
     req.logout(err =>{
         if(err){
             console.log(err);
-            return res.status(500),json({fatal_error: "view console"})
+            return res.status(500).json({fatal_error: "view console"})
         }
         return res.redirect("/login")
     })

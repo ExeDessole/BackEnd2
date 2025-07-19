@@ -10,7 +10,7 @@ import {
   updateAdminById,
   deleteUserById,
   deleteAdminById
-} from "../controllers/adminController.js";
+} from "../../controlers/adminController.js";
 
 const adminRouter = Router();
 

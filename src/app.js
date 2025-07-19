@@ -9,11 +9,20 @@ import morgan from "morgan";
 import views from "./routes/views.js";
 import api from "./routes/index.js";
 import { createDefaultAdmin } from "./utils.js";
+import cors from "cors";
 
 // Variables de entorno
 const app = express();
 const {PORT, SECRET} = process.env;
-createDefaultAdmin();
+
+// Conexión a MongoDB
+connectDB().then(() =>{
+  createDefaultAdmin();
+  //Iniciar servidor PUERTO DEL BACK
+app.listen(PORT, () => {
+  console.log(`🚀 Servidor escuchando en http://localhost:${PORT}`);
+});
+});
 
 // Middlewares
 app.use(express.json());
@@ -34,6 +43,13 @@ initializePAssport();
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.use(cors({
+  origin: `http://localhost:3000`,//PUERTO DEL FRONT
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true,
+}));
+
+
 // Handlebars config
 configHbs(app);
 
@@ -41,17 +57,9 @@ configHbs(app);
 app.use("/", views);
 app.use("/api", api);
 
-// Conexión a MongoDB
-connectDB();
-
 // Middleware de 404 personalizado
 app.use((req, res) => {
   res.status(404).json({ error: "Ruta no encontrada" });
-});
-
-//Iniciar servidor
-app.listen(PORT, () => {
-  console.log(`🚀 Servidor escuchando en http://localhost:${PORT}`);
 });
 
 export default app;

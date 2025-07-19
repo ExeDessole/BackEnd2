@@ -1,4 +1,29 @@
-import servicesUser from "../services/userService.js";
+import servicesUser from "../services/userServices.js"
+
+export async function createUser(req, res) {
+  try {
+    const { first_name, last_name, email, password, age, role } = req.body;
+
+    const existingUser = await servicesUser.findByEmail(email);
+    if (existingUser) {
+      return res.status(400).render("auth/failed", { error: "El email ya está en uso" });
+    }
+
+    const newUser = await servicesUser.createUser({
+      first_name,
+      last_name,
+      email,
+      password,
+      age,
+      role
+    });
+
+    res.status(201).render("user/profile", { user: newUser });
+
+  } catch (error) {
+    res.status(500).render("auth/failed", { error: error.message });
+  }
+};
 
 export async function getUserProfile(req, res) {
   try {
@@ -8,7 +33,7 @@ export async function getUserProfile(req, res) {
   } catch (error) {
     res.status(404).render("auth/failed", { error: error.message });
   }
-}
+};
 
 export async function updateUserProfile(req, res) {
   try {
@@ -19,7 +44,7 @@ export async function updateUserProfile(req, res) {
   } catch (error) {
     res.status(400).render("auth/failed", { error: error.message });
   }
-}
+};
 
 export async function deleteUserAccount(req, res) {
   try {
@@ -32,4 +57,4 @@ export async function deleteUserAccount(req, res) {
   } catch (error) {
     res.status(400).render("auth/failed", { error: error.message });
   }
-}
+};

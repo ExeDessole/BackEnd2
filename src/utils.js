@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import adminModel from "../DAOS/mongo/models/userModel.js";
+import adminModel from "../src/DAOS/mongo/models/adminModel.js";
 
 //F: Generador de token
 export const generateToken = (user) => {
