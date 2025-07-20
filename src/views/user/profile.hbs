@@ -97,12 +97,13 @@
       </tbody>
     </table>
 
-    <div class="buttons">
-      <a class="button" href="/session/logout">Logout</a>
-      <a class="button" href="/profile/update">Actualizar datos</a>
-      <a class="button" href="/profile/delete" onclick="return confirm('¿Estás seguro de eliminar tu cuenta? Esta acción es irreversible.')">Eliminar cuenta</a>
-    </div>
-  </div>
+<div class="buttons">
+
+  <form id="logout-form" action="api/session/logout" method="POST" style="display: none;"></form>
+  <a class="button" href="#" onclick="document.getElementById('logout-form').submit(); return false;">Logout</a>
+
+</div>
+
 
 </body>
 </html>

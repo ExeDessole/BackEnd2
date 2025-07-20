@@ -1,33 +1,67 @@
 import { Router } from "express";
 import passport from "passport";
+import { generateToken } from "../../utils.js";
 
 const sessionsRouter = Router();
 
-sessionsRouter.post(
-    "/login",
-    passport.authenticate("login",
-        { successRedirect: "/profile",
-          failureRedirect: "/failed"
-        })
-);
+// ✅ LOGIN
+sessionsRouter.post("/login", (req, res, next) => {
+  passport.authenticate("login", { session: false }, async (err, user, info) => {
+    if (err) {
+      console.error("❌ Error interno:", err);
+      return res.status(500).json({ error: "Error interno de autenticación" });
+    }
 
-sessionsRouter.post(
-    "/register",
-    passport.authenticate("register",
-        { successRedirect: "/profile",
-          failureRedirect: "/failed"
-        })
-);
+    if (!user) {
+      console.warn("⚠️ Usuario no autenticado:", info?.message);
+      return res.status(401).json({ error: info?.message || "Autenticación fallida" });
+    }
 
-sessionsRouter.post("/logout", (req, res) =>{
-    req.logout(err =>{
-        if(err){
-            console.log(err);
-            return res.status(500).json({fatal_error: "view console"})
-        }
-        return res.redirect("/login")
-    })
+    const token = generateToken(user);
+    res.cookie("jwt", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production", // true solo en producción
+      sameSite: "lax",
+      maxAge: 60 * 60 * 1000 // 1 hora
+    });
+
+    return res.redirect("/profile");
+  })(req, res, next);
 });
 
+// ✅ REGISTER
+sessionsRouter.post("/register", (req, res, next) => {
+  passport.authenticate("register", { session: false }, async (err, user, info) => {
+    if (err) {
+      console.error("❌ Error en registro:", err);
+      return res.status(500).json({ error: "Error interno de registro" });
+    }
+
+    if (!user) {
+      return res.status(400).json({ error: info?.message || "Registro fallido" });
+    }
+
+    const token = generateToken(user);
+    res.cookie("jwt", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      maxAge: 60 * 60 * 1000
+    });
+
+    return res.redirect("/profile");
+  })(req, res, next);
+});
+
+// ✅ LOGOUT (borra cookie)
+sessionsRouter.post("/logout", (req, res) => {
+  try {
+    res.clearCookie("jwt");
+    return res.redirect("/login");
+  } catch (error) {
+    console.error("❌ Error al hacer logout:", error);
+    return res.status(500).json({ error: "No se pudo cerrar sesión" });
+  }
+});
 
 export default sessionsRouter;

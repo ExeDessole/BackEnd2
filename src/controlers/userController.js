@@ -27,14 +27,11 @@ export async function createUser(req, res) {
 };
 
 export async function getUserProfile(req, res) {
-  console.log("🧠 Usuario desde req.user:", req.user);
   try {
     const userId = req.user._id;
-    const user = await servicesUser.getUser(userId);
-    console.log("📦 Usuario desde DB:", user);
+    const user = await servicesUser.getUserById(userId);
     res.render("user/profile", { user });
   } catch (error) {
-    console.error("❌ Error en getUserProfile:", error);
     res.status(404).render("auth/failed", { error: error.message });
   }
 }

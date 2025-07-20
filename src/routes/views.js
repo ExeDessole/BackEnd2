@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getUserProfile } from "../controlers/userController.js";
+import passport from "passport";
 
 const views = Router();
 
@@ -19,9 +19,14 @@ views.get("/register", (req, res) => {
 });
 
 // Perfil del usuario
-views.get("/profile", (req, res) => {
-  res.render("user/profile", { user: req.user });
-});
+views.get(
+  "/profile",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    res.render("user/profile", { user: req.user });
+  }
+);
+
 
 // Página de error (fallo)
 views.get("/failed", (req, res) => {

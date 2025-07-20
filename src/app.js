@@ -1,10 +1,9 @@
 import express from "express";
+import cookieParser from "cookie-parser";
 import connectDB from "./config/db.js";
 import configHbs from "./config/handlebars.js";
 import passport from "passport";
 import initializePAssport from "./config/passport.js";
-import session from "express-session";
-import cookieParser from "cookie-parser";
 import morgan from "morgan";
 import views from "./routes/views.js";
 import api from "./routes/index.js";
@@ -24,30 +23,15 @@ app.listen(PORT, () => {
 });
 });
 
-// Middlewares
+// Middlewares varios
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan("dev"));
 app.use(cookieParser());
-app.use(session({
-  secret: SECRET,
-  saveUninitialized: true,
-  resave:false,
-  cookie: {
-    httpOnly: true,
-    sameSite: true,
-    maxAge: 24*60*60
-  }
-}));
-initializePAssport();
-app.use(passport.initialize());
-app.use(passport.session());
 
-app.use((req, res, next) => {
-  console.log("📦 req.session:", req.session);
-  console.log("👤 req.user:", req.user);
-  next();
-});
+//Passport
+initializePAssport(passport);
+app.use(passport.initialize());
 
 app.use(cors({
   origin: `http://localhost:3000`,//PUERTO DEL FRONT
