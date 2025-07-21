@@ -11,8 +11,10 @@ import {
   deleteUserById,
   deleteAdminById
 } from "../../controlers/adminController.js";
+import { authorizeAdmin } from "../../middlewares/authAdmin.js";
 
 const adminRouter = Router();
+adminRouter.use(authorizeAdmin);
 
 //TODOS LOS PERMISOS
 //CRUD USUARIOS
