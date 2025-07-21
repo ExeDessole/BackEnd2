@@ -4,11 +4,10 @@ import { generateToken } from "../../utils.js";
 
 const sessionsRouter = Router();
 
-// ✅ LOGIN
+// LOGIN
 sessionsRouter.post("/login", (req, res, next) => {
   passport.authenticate("login", { session: false }, async (err, user, info) => {
     if (err) {
-      console.error("❌ Error interno:", err);
       return res.status(500).json({ error: "Error interno de autenticación" });
     }
 
@@ -18,9 +17,10 @@ sessionsRouter.post("/login", (req, res, next) => {
     }
 
     const token = generateToken(user);
+
     res.cookie("jwt", token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production", // true solo en producción
+      secure: process.env.NODE_ENV,
       sameSite: "lax",
       maxAge: 60 * 60 * 1000 // 1 hora
     });
@@ -29,11 +29,10 @@ sessionsRouter.post("/login", (req, res, next) => {
   })(req, res, next);
 });
 
-// ✅ REGISTER
+// REGISTER
 sessionsRouter.post("/register", (req, res, next) => {
   passport.authenticate("register", { session: false }, async (err, user, info) => {
     if (err) {
-      console.error("❌ Error en registro:", err);
       return res.status(500).json({ error: "Error interno de registro" });
     }
 
@@ -42,9 +41,10 @@ sessionsRouter.post("/register", (req, res, next) => {
     }
 
     const token = generateToken(user);
+
     res.cookie("jwt", token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
+      secure: process.env.NODE_ENV,
       sameSite: "lax",
       maxAge: 60 * 60 * 1000
     });
@@ -53,13 +53,12 @@ sessionsRouter.post("/register", (req, res, next) => {
   })(req, res, next);
 });
 
-// ✅ LOGOUT (borra cookie)
+// LOGOUT (borra cookie)
 sessionsRouter.post("/logout", (req, res) => {
   try {
     res.clearCookie("jwt");
     return res.redirect("/login");
   } catch (error) {
-    console.error("❌ Error al hacer logout:", error);
     return res.status(500).json({ error: "No se pudo cerrar sesión" });
   }
 });

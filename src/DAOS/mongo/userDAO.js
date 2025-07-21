@@ -13,12 +13,12 @@ const userDao = {
   },
   // Solo devuelve el usuario logueado
   getById(id) {
-    return userModel.findById(id).lean();
+    return userModel.findById(id);
   },
 
   // Solo puede actualizar sus propios datos
   updateById(id, data) {
-    return userModel.findByIdAndUpdate(id, data, { new: true }).lean();
+    return userModel.findByIdAndUpdate(id, data, { new: true });
   },
 
   // Solo puede eliminar su propia cuenta
