@@ -1,4 +1,4 @@
-import adminDAO from "../DAOS/mongo/adminDAO.js";
+import adminDAO from "../repository/DAOS/mongo/adminDAO.js";
 
 const adminServices = {
   async getAllUsers() {

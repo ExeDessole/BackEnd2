@@ -1,5 +1,5 @@
-import userModel from "../DAOS/mongo/models/userModel.js";
-import userDao from "../DAOS/mongo/userDAO.js"
+import userModel from "../repository/DAOS/mongo/models/userModel.js";
+import userDao from "../repository/DAOS/mongo/userDAO.js"
 
 const servicesUser = {
     async createUser(data) {

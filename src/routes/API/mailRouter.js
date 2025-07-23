@@ -1,5 +1,5 @@
 import { Router } from "express";
-import mailController from "../../controlers/mailController.js"; // ✅ Ruta corregida
+import mailController from "../../controlers/mailController.js";
 
 const {
   renderRecoveryForm,

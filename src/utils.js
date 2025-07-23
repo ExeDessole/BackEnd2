@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import adminModel from "../src/DAOS/mongo/models/adminModel.js";
+import adminModel from "./repository/DAOS/mongo/models/adminModel.js";
 import UserPayload from "./DTOs/userPayloadJWT.js";
 import RecoveryPayload from "./DTOs/recoveryPayload,js";
 
