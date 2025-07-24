@@ -3,13 +3,13 @@ import userModel from "./models/userModel.js";
 
 const userDao = {
   //Crea un asuario nuevo
-  async createUser(data) {
+  createUser(data) {
     const user = new userModel(data);
-    return await user.save();
+    return user.save();
   },
   //Filtra por email
-  async findByEmail(email) {
-    return await userModel.findOne({ email });
+  findByEmail(email) {
+    return userModel.findOne({ email });
   },
   // Solo devuelve el usuario logueado
   getById(id) {

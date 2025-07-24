@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
-import adminModel from "./repository/DAOS/mongo/models/adminModel.js";
+import userModel from "./repository/DAOS/mongo/models/userModel.js";
 import UserPayload from "./DTOs/userPayloadJWT.js";
-import RecoveryPayload from "./DTOs/recoveryPayload,js";
+import RecoveryPayload from "./DTOs/recoveryPayload.js";
 
 const {JWT_SECRET, ADMIN_EMAIL, ADMIN_PASSWORD} = process.env;
 //F: Generador de token
@@ -33,9 +33,9 @@ export function validateToken(token) {
 
 //F: Crea un admin por default (creador del proyecto)
 export async function createDefaultAdmin() {
-  const existingAdmin = await adminModel.findOne({ email: ADMIN_EMAIL });
+  const existingAdmin = await userModel.findOne({ email: ADMIN_EMAIL });
   if (!existingAdmin) {
-    await adminModel.create({
+    await userModel.create({
       first_name: "Exequiel",
       last_name: "Dessole",
       email: ADMIN_EMAIL,

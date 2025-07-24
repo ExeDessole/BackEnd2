@@ -41,6 +41,9 @@ views.get("/recovery/resetPassLink", (req, res) => {
   const { token } = req.query;
   res.render("recovery/resetPassLink", { token });
 });
+views.get("/products", (req,res) => {
+  res.render("product/productList", {products});
+});
 
 // Página de error
 views.get("/failed", (req, res) => {
