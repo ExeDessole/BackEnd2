@@ -27,7 +27,6 @@ const productServices = {
   },
   async getByDescription(description) {
     const product = await productDAO.getByDescription(description);
-    if (!product) throw new Error("Producto no encontrado");
     return product;
   },
   // Devuelve producto por ID

@@ -21,7 +21,11 @@ export async function createProduct(req, res) {
     console.log(newProduct);
     const allProducts = await productServices.getProducts();
 
-    res.status(201).render("product/productList", { products: allProducts });
+    res.status(201).json({
+      message: "Producto creado con éxito",
+      producto: newProduct,
+      todos: allProducts
+     });
 
   } catch (error) {
     res.status(500).render("auth/failed", { error: error.message });
@@ -31,7 +35,7 @@ export async function createProduct(req, res) {
 export async function getProducts(req, res) {
   try {
     const products = await productServices.getProducts();
-    res.render("user/profile", { products });
+    res.status(200).json({ products });
   } catch (error) {
     res.status(404).render("auth/failed", { error: error.message });
   }
@@ -40,7 +44,7 @@ export async function getProductsById(req, res) {
   try {
     const id = req.product._id; //revisar
     const product = await productServices.getProducts(id);
-    res.render("user/profile", { product });
+    res.status(200).json({ products });
   } catch (error) {
     res.status(404).render("auth/failed", { error: error.message });
   }
