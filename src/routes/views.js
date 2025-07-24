@@ -53,4 +53,38 @@ views.get("/failed", (req, res) => {
   res.render("auth/failed");
 });
 
+//Vista del carrito
+views.get("/cart", async (req, res) => {
+  try {
+    const userId = req.user._id; // protegé esta vista si es necesario
+    const cart = await cartServices.getCart(userId);
+    res.render("product/cart", { cart });
+  } catch (error) {
+    res.status(500).render("auth/failed", { error: error.message });
+  }
+});
+
+views.post("/cart/remove/:productId", async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const productId = req.params.productId;
+    await cartServices.removeProduct(userId, productId);
+    res.redirect("/cart");
+  } catch (error) {
+    res.status(500).render("auth/failed", { error: error.message });
+  }
+});
+
+views.post("/cart/clear", async (req, res) => {
+  try {
+    const userId = req.user._id;
+    await cartServices.clear(userId);
+    res.redirect("/cart");
+  } catch (error) {
+    res.status(500).render("auth/failed", { error: error.message });
+  }
+});
+
+
+
 export default views;

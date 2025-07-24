@@ -1,4 +1,3 @@
-import productModel from "../repository/DAOS/mongo/models/productModel.js";
 import productDAO from "../repository/DAOS/mongo/productDAO.js";
 
 const productServices = {
@@ -8,8 +7,8 @@ const productServices = {
       const existing = await productDAO.getByDescription(data.description);
       if (existing) throw new Error("El producto ya existe");
 
-      const product = new productModel(data);
-      return await product.save();
+      const product = await productDAO.createProduct(data);
+      return product;
     } catch (error) {
       if (error.code === 11000) {
         throw new Error("El producto ya está registrado (duplicado)");
