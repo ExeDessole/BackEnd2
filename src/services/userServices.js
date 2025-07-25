@@ -1,4 +1,3 @@
-import userModel from "../repository/DAOS/mongo/models/userModel.js";
 import userDao from "../repository/DAOS/mongo/userDAO.js"
 
 const servicesUser = {
@@ -7,8 +6,8 @@ const servicesUser = {
     const existing = await userDao.findByEmail(data.email);
     if (existing) throw new Error("El email ya está en uso");
 
-    const user = new userModel(data);
-    return await user.save();
+    const user = await userDao.createUser(data);
+    return user;
   } catch (error) {
     if (error.code === 11000) {
       throw new Error("El email ya está registrado (duplicado)");

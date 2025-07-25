@@ -10,7 +10,7 @@ export function authorizeAdmin(req, res, next) {
       return res.status(403).json({ message: "Acceso denegado: solo para administradores" });
     }
 
-    next(); // autorizado
+    next();
   } catch (error) {
     console.error("Error en middleware authorizeAdmin:", error);
     return res.status(500).json({ message: "Error del servidor" });

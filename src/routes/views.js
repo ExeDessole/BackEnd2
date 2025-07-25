@@ -34,7 +34,7 @@ views.get(
 );
 // Página de recupero de contraseña
 views.get("/recovery", (req, res) => {
-  res.render("recovery/reqReset"); // tu plantilla .hbs donde el usuario pone el email
+  res.render("recovery/reqReset");
 });
 
 // Mostrar formulario para cambiar la contraseña (desde link con token)
@@ -44,7 +44,6 @@ views.get("/recovery/resetPassLink", (req, res) => {
 });
 views.get("/products", async (req,res) => {
   const products = await productServices.getProducts();
-  console.log("🟢 Productos para render:", products);
   res.render("product/productList", { products });
 });
 
@@ -56,7 +55,7 @@ views.get("/failed", (req, res) => {
 //Vista del carrito
 views.get("/cart", async (req, res) => {
   try {
-    const userId = req.user._id; // protegé esta vista si es necesario
+    const userId = req.user._id;
     const cart = await cartServices.getCart(userId);
     res.render("product/cart", { cart });
   } catch (error) {
@@ -84,7 +83,5 @@ views.post("/cart/clear", async (req, res) => {
     res.status(500).render("auth/failed", { error: error.message });
   }
 });
-
-
 
 export default views;

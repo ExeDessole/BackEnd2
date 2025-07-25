@@ -23,4 +23,3 @@ mailRouter.get("/reset/:token", renderResetForm);
 mailRouter.post("/reset/:token", resetPassword);
 
 export default mailRouter;
-

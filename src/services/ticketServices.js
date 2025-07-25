@@ -1,6 +1,6 @@
 import ticketDAO from "../repository/DAOS/mongo/ticketDAO.js";
 import cartDAO from "../repository/DAOS/mongo/cartDAO.js";
-import { v4 as uuidv4 } from "uuid"; // para código único
+import { v4 as uuidv4 } from "uuid";
 
 const ticketServices = {
   async checkout(userId) {

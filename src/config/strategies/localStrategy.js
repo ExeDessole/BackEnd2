@@ -41,4 +41,4 @@ async function verifyLogin(username, password, done) {
 };
 
 export const registerLocal = new Strategy({usernameField: "email", passReqToCallback: true}, verifyRegister);
-export const loginLocal = new Strategy({usernameField: "email"}, verifyLogin)
+export const loginLocal = new Strategy({usernameField: "email"}, verifyLogin);

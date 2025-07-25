@@ -8,7 +8,7 @@ export async function getCart(req, res) {
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
-}
+};
 
 export async function addProduct(req, res) {
   try {
@@ -19,7 +19,7 @@ export async function addProduct(req, res) {
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
-}
+};
 
 export async function removeProduct(req, res) {
   try {
@@ -30,7 +30,7 @@ export async function removeProduct(req, res) {
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
-}
+};
 
 export async function clearCart(req, res) {
   try {
@@ -40,4 +40,4 @@ export async function clearCart(req, res) {
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
-}
+};

@@ -2,12 +2,10 @@ import servicesUser from "../services/userServices.js";
 import mailService from "../services/mailServices.js";
 import { validateToken } from "../utils.js";
 
-// GET /reqReset
 const renderRecoveryForm = (req, res) => {
   res.render("recovery/reqReset");
 };
 
-// POST /reqReset
 const sendRecoveryMail = async (req, res) => {
   const { email } = req.body;
 
@@ -23,7 +21,6 @@ const sendRecoveryMail = async (req, res) => {
   }
 };
 
-// GET /reset/:token
 const renderResetForm = (req, res) => {
   const { token } = req.params;
 
@@ -35,7 +32,6 @@ const renderResetForm = (req, res) => {
   }
 };
 
-// POST /reset/:token
 const resetPassword = async (req, res) => {
   const { token } = req.params;
   const { password } = req.body;

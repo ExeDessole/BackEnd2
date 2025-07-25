@@ -1,4 +1,4 @@
-import servicesUser from "../services/userServices.js"
+import servicesUser from "../services/userServices.js";
 
 export async function createUser(req, res) {
   try {
@@ -34,7 +34,7 @@ export async function getUserProfile(req, res) {
   } catch (error) {
     res.status(404).render("auth/failed", { error: error.message });
   }
-}
+};
 
 
 export async function updateUserProfile(req, res) {

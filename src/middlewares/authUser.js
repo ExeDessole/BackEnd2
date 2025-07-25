@@ -1,4 +1,3 @@
-// middlewares/authorizeUser.js
 export function authorizeUser(req, res, next) {
   try {
     const user = req.user;
