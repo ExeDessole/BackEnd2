@@ -5,7 +5,6 @@ export async function getCart(req, res) {
   try {
     const userId = req.user.id;
     const cart = await cartServices.getCartByUserId(userId);
-    console.log(JSON.stringify(cart.products, null, 2));
 
     res.redirect("/cart");
   } catch (error) {
@@ -18,14 +17,6 @@ export async function addProduct(req, res) {
     const userId = req.user.id;
     const productId = req.body.id;
     const quantity = req.body.quantity || 1;
-
-    console.log("🧾 Agregando producto al carrito:", {
-      userId,
-      productId,
-      quantity,
-    });//Prueba a ver si envia lo solicitado
-    console.log("👉 req.body:", req.body);
-
 
     await cartServices.addProductToCart(userId, productId, quantity);
 

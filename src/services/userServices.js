@@ -17,14 +17,22 @@ const servicesUser = {
 }
 ,
     async getUserById(id) {
-        const user = await userDao.getById(id);
-        if(!user) throw new Error("Usuario no encontrado");
-        return user;
+      const user = await userDao.getById(id);
+      if(!user) throw new Error("Usuario no encontrado");
+      return user;
     },
-    async getUserByEmail(email){
-        const e_mail = await userDao.findByEmail(email);
-        return e_mail;
-    },
+ async getUserByEmail(email) {
+  const user = await userDao.findByEmail(email);
+
+  if (!user) {
+    console.log("❌ Usuario no encontrado con email:", email);
+    return null; // o podrías lanzar un error si preferís
+  }
+
+  console.log("Hash en DB:", user.password);
+  return user;
+},
+
     async updateUser(id, data) {
         const userUpdated = await userDao.updateById(id, data);
         if(!userUpdated) throw new Error("No se puede actualizar");

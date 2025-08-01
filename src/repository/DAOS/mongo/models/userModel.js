@@ -31,16 +31,23 @@ const userSchema = new mongoose.Schema({
 
 // Middleware para hashear contraseña antes de guardar
 userSchema.pre("save", async function (next) {
-  if (!this.isModified("password")) return next();
+  if (!this.isModified("password")) {
+    console.log("Password no modificado, next");
+    return next();
+  }
 
   try {
+    console.log("🔒 Hasheando contraseña:", this.password);
     const saltRounds = 10;
     this.password = await bcrypt.hash(this.password, saltRounds);
+    console.log("✅ Contraseña hasheada:", this.password);
+
     next();
   } catch (error) {
     next(error);
   }
 });
+
 
 // Método para comparar contraseñas
 userSchema.methods.comparePassword = async function (inputPassword) {

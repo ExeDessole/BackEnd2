@@ -12,7 +12,7 @@ const adminDAO = {
   },
   //Retorna un usuario común por ID
   getUserById(id) {
-    return userModel.findById(id).lean();
+    return userModel.findById(id);
   },
   //Retorna un administrador por ID
   getAdminById(id) {

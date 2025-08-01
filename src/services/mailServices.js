@@ -22,7 +22,6 @@ const mailService = {
 
     try {
       const info = await transporter.sendMail(mailOptions);
-      console.log("📧 Correo enviado:", info.messageId);
       return info;
     } catch (err) {
       console.error("❌ Error al enviar el correo:", err);

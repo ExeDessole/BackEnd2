@@ -1,6 +1,8 @@
 import servicesUser from "../services/userServices.js";
 import mailService from "../services/mailServices.js";
 import { validateToken } from "../utils.js";
+import mongoose from "mongoose";
+
 
 const renderRecoveryForm = (req, res) => {
   res.render("recovery/reqReset");
@@ -40,9 +42,16 @@ const resetPassword = async (req, res) => {
     const decoded = validateToken(token);
     const user = await servicesUser.getUserById(decoded.id);
     if (!user) return res.status(404).send("Usuario no encontrado");
+console.log("🆔 ID usuario que está reseteando:", user._id);
 
-    user.password = password;
-    await user.save();
+    console.log("Es un documento de mongoose?", user instanceof mongoose.Document);
+console.log("Contraseña antes:", user.password);
+user.password = password;
+user.markModified("password");
+console.log("Nueva contraseña asignada:", user.password);
+await user.save();
+console.log("✅ Contraseña actualizada correctamente");
+
 
     return res.redirect("/login");
   } catch (err) {

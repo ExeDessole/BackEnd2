@@ -10,7 +10,6 @@ export function authenticateToken(req, res, next) {
   try {
     const decoded = validateToken(token);
     req.user = decoded;
-    console.log("✅ Usuario autenticado:", decoded);
     next();
   } catch (err) {
     console.error("❌ Token inválido:", err.message);
