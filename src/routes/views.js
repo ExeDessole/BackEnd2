@@ -3,6 +3,7 @@ import passport from "passport";
 import UserDTO from "../DTOs/userDTO.js"
 import mailRouter from "./API/mailRouter.js";
 import productServices from "../services/productServices.js";
+import { getProducts } from "../controlers/productController.js";
 
 const views = Router();
 
@@ -44,6 +45,7 @@ views.get("/recovery/resetPassLink", (req, res) => {
 });
 views.get("/products", async (req,res) => {
   const products = await productServices.getProducts();
+  console.log("🟢 Productos para render:", products);
   res.render("product/productList", { products });
 });
 
