@@ -1,10 +1,13 @@
 import cartServices from "../services/cartServices.js";
+import productServices from "../services/productServices.js";
 
 export async function getCart(req, res) {
   try {
-    const userId = req.user._id;
-    const cart = await cartServices.getCart(userId);
-    res.status(200).json(cart);
+    const userId = req.user.id;
+    const cart = await cartServices.getCartByUserId(userId);
+    console.log(JSON.stringify(cart.products, null, 2));
+
+    res.redirect("/cart");
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -12,10 +15,23 @@ export async function getCart(req, res) {
 
 export async function addProduct(req, res) {
   try {
-    const userId = req.user._id;
-    const { productId, quantity } = req.body;
-    const cart = await cartServices.addProduct(userId, productId, quantity);
-    res.status(200).json(cart);
+    const userId = req.user.id;
+    const productId = req.body.id;
+    const quantity = req.body.quantity || 1;
+
+    console.log("🧾 Agregando producto al carrito:", {
+      userId,
+      productId,
+      quantity,
+    });//Prueba a ver si envia lo solicitado
+    console.log("👉 req.body:", req.body);
+
+
+    await cartServices.addProductToCart(userId, productId, quantity);
+
+    const products = await productServices.getProducts();
+    const message = "Producto agregado";
+    res.render("product/productList", { products, message });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -23,10 +39,10 @@ export async function addProduct(req, res) {
 
 export async function removeProduct(req, res) {
   try {
-    const userId = req.user._id;
+    const userId = req.user.id;
     const { productId } = req.params;
-    const cart = await cartServices.removeProduct(userId, productId);
-    res.status(200).json(cart);
+    await cartServices.removeProductFromCart(userId, productId);
+    res.redirect("/cart");
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -34,9 +50,9 @@ export async function removeProduct(req, res) {
 
 export async function clearCart(req, res) {
   try {
-    const userId = req.user._id;
-    const cart = await cartServices.clear(userId);
-    res.status(200).json(cart);
+    const userId = req.user.id;
+    await cartServices.clearCart(userId);
+    res.redirect("/cart");
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
